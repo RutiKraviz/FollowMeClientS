@@ -1,0 +1,6 @@
+# Dependency directories 
+/node_modules/ 
+ECHO is on.
+# Production build directory 
+/build/ 
+ECHO is on.
