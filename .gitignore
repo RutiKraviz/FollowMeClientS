@@ -3,4 +3,5 @@
 ECHO is on.
 # Production build directory 
 /build/ 
+.env*
 ECHO is on.

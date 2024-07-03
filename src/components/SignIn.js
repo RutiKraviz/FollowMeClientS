@@ -1,7 +1,6 @@
-// src/components/SignIn.js
 import React, {useState} from 'react';
-import {Button, TextField, Typography, Container, Dialog} from '@mui/material';
-import {useDispatch,useSelector} from 'react-redux';
+import { Button, TextField, Typography, Container} from '@mui/material';
+import { useDispatch, useSelector} from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 export default function SignIn() {
