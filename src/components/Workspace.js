@@ -6,6 +6,8 @@ import UserProfile from './UserProfile';
 import Home from './Home';
 import Driver from './Driver';
 import UpdateStation from './UpdateStation';
+import SignInComp from './SignIn';
+import About from './About';
 
 export default function Workspace() {
 
@@ -15,6 +17,8 @@ export default function Workspace() {
         <Route path='/Map' element={<GoogleMap />} />
         <Route path='/Login' element={<Login/>} />
         <Route path='/Login/:mess' element={<Login/>} />
+        <Route path='/SignIn/' element={<SignInComp/>} />
+        <Route path='/About/' element={<About/>} />
 
         <Route path='/UserProfile' element={<UserProfile/>} />
         <Route path='/Home' element={<Home/>} />

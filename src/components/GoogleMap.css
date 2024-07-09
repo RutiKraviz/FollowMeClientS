@@ -1,0 +1,19 @@
+.info-box {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 16px;
+    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+  }
+  
+  .info-box ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .info-box li {
+    margin-bottom: 8px;
+  }
+  

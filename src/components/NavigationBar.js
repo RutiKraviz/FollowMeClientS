@@ -1,25 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { BottomNavigationAction, Tooltip } from '@mui/material';
 import VolunteerActivismOutlinedIcon from '@mui/icons-material/VolunteerActivismOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-
 import ListIcon from '@mui/icons-material/List';
 import SubwayIcon from '@mui/icons-material/Subway';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Logo from './Logo';
 
 function NavigationBar() {
-
     return (
         <>
-         <BottomNavigationAction color='primary'   
-                    icon   ={ <Logo/>}
+            <Tooltip title="Logo">
+                <BottomNavigationAction 
+                    color='primary'   
+                    icon={<Logo />}
                 />
-              <BottomNavigationAction
+            </Tooltip>
+            <Tooltip title="Home">
+                <BottomNavigationAction
                     color='primary'
                     label="Home"
                     value="/"
@@ -27,6 +29,8 @@ function NavigationBar() {
                     component={Link}
                     to="/Home"
                 />
+            </Tooltip>
+            <Tooltip title="Login">
                 <BottomNavigationAction
                     color='primary'
                     label="Login"
@@ -35,31 +39,49 @@ function NavigationBar() {
                     component={Link}
                     to="/Login"
                 />
+            </Tooltip>
+            <Tooltip title="Update Details">
                 <BottomNavigationAction
                     color='primary'
-                    label="update details"
+                    label="Update Details"
                     value="UpUser"
                     icon={<PersonOutlineOutlinedIcon color='secondary' />}
                     component={Link}
                     to="/UserProfile"
                 />
-                  <BottomNavigationAction
+            </Tooltip>
+            <Tooltip title="Google Map">
+                <BottomNavigationAction
                     color='primary'
-                    label="update details"
-                    value="UpUser"
+                    label="Google Map"
+                    value="Map"
                     icon={<SubwayIcon color='secondary' />}
                     component={Link}
                     to="/Map"
                 />
-                  <BottomNavigationAction
+            </Tooltip>
+            <Tooltip title="Driver">
+                <BottomNavigationAction
                     color='primary'
-                    label="update details"
-                    value="UpUser"
+                    label="Driver"
+                    value="Driver"
                     icon={<ListIcon color='secondary' />}
                     component={Link}
                     to="/Driver"
                 />
-        </>);
+            </Tooltip>
+            <Tooltip title="About">
+                <BottomNavigationAction
+                    color='primary'
+                    label="About"
+                    value="About"
+                    icon={<InfoOutlinedIcon color='secondary' />}
+                    component={Link}
+                    to="/About"
+                />
+            </Tooltip>
+        </>
+    );
 };
 
 export default NavigationBar;

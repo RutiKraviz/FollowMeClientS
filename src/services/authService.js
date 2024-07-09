@@ -1,49 +1,67 @@
 import axiosInstance from "../api";
 
-
-//פונקצית כניסה למערכת אם המשתמש רשום מועבר למסך של המסלול אם לא להרשמה
 const signIn = (user) => {
-
-  return dispatch => {
-    debugger
-     axiosInstance.post('/Login', user).then(response => {
+  const userToReq = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    passWord: user.password, // Correct key name
+    roleId: 2,
+    email: user.email,
+    stationId: user.stationId
+  }
+  console.log(JSON.stringify(userToReq));
+  return (dispatch) => {
+    axiosInstance.post('/Customer', {
+      body: JSON.stringify(userToReq)
+    })
+    .then(response => {
       console.log(response)
       dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
-        console.log("success")
-      })
-      .catch((error) => {
-        dispatch({ type: 'LOGIN_ERROR', payload: error.message });
-        console.log("bad")
-      });
-  }
-};
-
-//פונקצית הרשמה
-const logIn = (user) => {
-
-  return dispatch => {
-    const response = axiosInstance.post('/login', user).then(x => {
-      dispatch({ type: "USER", payload: response.data })
-    }).catch(error => {
-      console.log(error);
+      console.log("success")
     })
-  }
+    .catch((error) => {
+      dispatch({ type: 'LOGIN_ERROR', payload: error.message });
+      console.log("bad", error);
+      throw error; // Rethrow the error to be caught in the component
+    });
+  };
 };
 
-//פונקצית עדכון פרטי משתמש
-const Update = (user) => {
+const logIn = (user) => {
+  return (dispatch) => {
+    return axiosInstance.post('/User/Login', user)
+      .then(response => {
+        console.log("after login: ", response);
+        dispatch({ type: "SET_USER", payload: response.data });
+        console.log(response.status == 200);
+        if (response.status == 200) {
+          dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
+        } else {
+          throw new Error("User not authenticated");
+        }
+      })
+      .catch(error => {
+        console.error("Login failed with error:", error);
+        dispatch({ type: 'LOGIN_ERROR', payload: error.message });
+        throw error;
+      });
+  };
+};
 
-  return dispatch => {
-     axiosInstance.post('/Coustemer', user).then(response => {
-      console.log(response)
-      dispatch({ type: 'UPDATE_SUCCESS', payload: response.data });
+const Update = (user) => {
+  return (dispatch) => {
+    axiosInstance.post('/Customer', user)
+      .then(response => {
+        console.log("response", response)
+        dispatch({ type: 'UPDATE_SUCCESS', payload: response.data });
         console.log("success")
       })
       .catch((error) => {
         dispatch({ type: 'UPDATE_ERROR', payload: error.message });
-        console.log("bad")
+        console.log("bad");
       });
-  }
+  };
 };
 
 export { signIn, logIn, Update };
