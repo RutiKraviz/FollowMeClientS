@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+// src/components/UserProfile.js
+import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { Update } from '../services/authService';
+import { fetchStations } from '../services/stationService';
 import Stack from "@mui/material/Stack";
 
 export default function UserProfile() {
   const user = useSelector(state => state.auth.currentUser);
+  const stations = useSelector(state => state.stations.stations);
   const [firstName, setFirstName] = useState(user.firstName || '');
   const [lastName, setLastName] = useState(user.lastName || '');
   const [email, setEmail] = useState(user.email || '');
   const [fullAddress, setFullAddress] = useState(user.fullAddress || '');
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchStations());
+  }, [dispatch]);
 
   const handleUpdateUser = (e) => {
     e.preventDefault();
@@ -49,6 +56,13 @@ export default function UserProfile() {
       <TextField label='LastName' variant='outlined' fullWidth margin='normal' value={lastName} onChange={(e) => setLastName(e.target.value)} />
       <TextField label='FullAddress' variant='outlined' fullWidth margin='normal' value={fullAddress} onChange={(e) => setFullAddress(e.target.value)} />
       <TextField label='Email' variant='outlined' fullWidth margin='normal' value={email} onChange={(e) => setEmail(e.target.value)} />
+      
+      {stations.length > 0 && (
+        <Typography variant="body1">
+          Total stations: {stations.length}
+        </Typography>
+      )}
+
       <Button
         sx={{
           alignContent: "center",

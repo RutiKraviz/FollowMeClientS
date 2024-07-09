@@ -5,26 +5,27 @@ const signIn = (user) => {
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
-    passWord: user.password, // Correct key name
+    passWord: user.password,
     roleId: 2,
     email: user.email,
     stationId: user.stationId
-  }
-  console.log(JSON.stringify(userToReq));
+  };
+  
+  console.log(userToReq);
+  
   return (dispatch) => {
-    axiosInstance.post('/Customer', {
-      body: JSON.stringify(userToReq)
-    })
-    .then(response => {
-      console.log(response)
-      dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
-      console.log("success")
-    })
-    .catch((error) => {
-      dispatch({ type: 'LOGIN_ERROR', payload: error.message });
-      console.log("bad", error);
-      throw error; // Rethrow the error to be caught in the component
-    });
+    return axiosInstance.post('/Customer', userToReq)
+      .then(response => {
+        console.log(response);
+        dispatch({ type: 'LOGIN_SUCCESS', payload: response.data });
+        console.log("success");
+        return response.data; // Return the data for further processing if needed
+      })
+      .catch((error) => {
+        dispatch({ type: 'LOGIN_ERROR', payload: error.message });
+        console.log("bad", error);
+        throw error; // Rethrow the error to be caught in the component
+      });
   };
 };
 

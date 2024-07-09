@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, DirectionsRenderer } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoute } from '../services/routeService';
 import dayjs from 'dayjs';
@@ -23,6 +23,11 @@ const center = {
 const libraries = ['places'];
 
 const GoogleMaps = () => {
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
   const [response, setResponse] = useState(null);
   const [timeToUserStation, setTimeToUserStation] = useState('');
   const [totalDistance, setTotalDistance] = useState(null);
@@ -130,54 +135,66 @@ const GoogleMaps = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading maps</div>;
+  }
+
   return (
-    <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} libraries={libraries}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>
-        {response && <DirectionsRenderer options={{ directions: response }} />}
+    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={14}>
+      {response && <DirectionsRenderer options={{ directions: response }} />}
 
-        {loading && (
-          <Box className="info-box" sx={{ top: 20, left: '50%', transform: 'translateX(-50%)' }}>
-            <Typography variant="h6">טוען...</Typography>
-          </Box>
-        )}
+      {loading && (
+        <Box className="info-box" sx={{ top: 20, left: '50%', transform: 'translateX(-50%)' }}>
+          <Typography variant="h6">טוען...</Typography>
+        </Box>
+      )}
 
-        {error && (
-          <Box className="info-box" sx={{ top: 20, left: '50%', transform: 'translateX(-50%)' }}>
-            <Typography variant="h6">שגיאה: {error}</Typography>
+      {!loading && !error && (
+        <>
+          <Box
+            className="info-box"
+            sx={{
+              top: 70,
+              right: 20,
+            }}
+            dir='rtl'
+          >
+            <Typography variant="h6" gutterBottom>שלום, {user.firstName}</Typography>
+            <Typography variant="body1" gutterBottom>זמן נוכחי: {currentTime}</Typography>
+            {user.roleId == 2 &&
+            <Typography variant="body1">
+              זמן עד שהאוטובוס יגיע לתחנה שלך: {timeToUserStation.hours} שעות, {timeToUserStation.minutes} דקות, {timeToUserStation.seconds} שניות
+            </Typography>}
           </Box>
-        )}
-      </GoogleMap>
-      <Box
-        className="info-box"
-        sx={{
-          top: 70,
-          right: 20,
-        }}
-        dir='rtl'
-      >
-        <Typography variant="h6" gutterBottom>שלום, {user.firstName}</Typography>
-        <Typography variant="body1" gutterBottom>זמן נוכחי: {currentTime}</Typography>
-        <Typography variant="body1">
-          זמן עד שהאוטובוס יגיע לתחנה שלך: {timeToUserStation.hours} שעות, {timeToUserStation.minutes} דקות, {timeToUserStation.seconds} שניות
-        </Typography>
-      </Box>
-      <Box
-        className="info-box"
-        sx={{
-          top: 270, // Positioning right below the previous info box
-          right: 20,
-        }}
-        dir='rtl'
-      >
-        <Typography variant="h6" gutterBottom>רשימת תחנות</Typography>
-        {stations.length &&
-        <ul>
-          {stations.map((station, index) => (
-            <li key={index}>{station.fullAddress}</li>
-          ))}
-        </ul>}
-      </Box>
-    </LoadScript>
+          <Box
+            className="info-box"
+            sx={{
+              top: 270, // Positioning right below the previous info box
+              right: 20,
+            }}
+            dir='rtl'
+          >
+            <Typography variant="h6" gutterBottom>רשימת תחנות</Typography>
+            {stations.length &&
+            <ul>
+              {stations.map((station, index) => (
+                <li key={index}>{station.fullAddress}</li>
+              ))}
+            </ul>}
+          </Box>
+        </>
+      )}
+
+      {error && (
+        <Box className="info-box" sx={{ top: 20, left: '50%', transform: 'translateX(-50%)' }}>
+          <Typography variant="h6">שגיאה: {error}</Typography>
+        </Box>
+      )}
+    </GoogleMap>
   );
 };
 

@@ -2,10 +2,13 @@
 import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import routeReducer from './routeReducer';
+import stationReducer from './stationReducer';
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  route: routeReducer
+  route: routeReducer,
+  stations: stationReducer,
+
   // Add other reducers here
   
 });
